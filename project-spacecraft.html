@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spacecraft Attitude Control | Issey Siele</title>
+  <meta name="description" content="Experimental side project: a MATLAB attitude-control simulation of a small spacecraft with torque-limited reaction wheels, PID and LQR pointing, a safe mode with hysteresis, and Monte Carlo verification against written requirements.">
+  <meta name="author" content="Issey Siele">
+  <link rel="canonical" href="https://isseysiele.github.io/portfolio/project-spacecraft.html">
+  <meta name="theme-color" content="#1b222b">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Issey Siele">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Spacecraft Attitude Control | Issey Siele">
+  <meta property="og:description" content="Experimental side project: a MATLAB attitude-control simulation with PID and LQR pointing, a safe mode with hysteresis, and Monte Carlo verification.">
+  <meta property="og:url" content="https://isseysiele.github.io/portfolio/project-spacecraft.html">
+  <meta property="og:image" content="https://isseysiele.github.io/portfolio/assets/og/og-default.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Issey Siele, mechanical engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" href="assets/fonts/didact-gothic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261007">
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js?v=20261007"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Person", "@id": "https://isseysiele.github.io/portfolio/#person", "name": "Issey Siele", "url": "https://isseysiele.github.io/portfolio/", "image": "https://isseysiele.github.io/portfolio/assets/img/about-portrait.webp", "jobTitle": "Construction Cadet", "worksFor": {"@type": "Organization", "name": "Binah Construction"}, "affiliation": {"@type": "CollegeOrUniversity", "name": "Griffith University"}, "knowsAbout": ["Mechanical engineering", "Kinematic analysis", "SolidWorks", "Mechanism analysis", "Field service engineering", "Construction programming", "Python", "MATLAB", "Data science"], "knowsLanguage": ["en", "ti"], "address": {"@type": "PostalAddress", "addressLocality": "Brisbane", "addressRegion": "QLD", "addressCountry": "AU"}, "sameAs": ["https://www.linkedin.com/in/isseysiele/"]}, {"@type": "WebSite", "@id": "https://isseysiele.github.io/portfolio/#website", "url": "https://isseysiele.github.io/portfolio/", "name": "Issey Siele, Mechanical Engineering Portfolio", "inLanguage": "en-AU", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}}, {"@type": "Article", "@id": "https://isseysiele.github.io/portfolio/project-spacecraft.html#page", "url": "https://isseysiele.github.io/portfolio/project-spacecraft.html", "name": "Spacecraft Attitude Control | Issey Siele", "description": "Experimental side project: a MATLAB attitude-control simulation of a small spacecraft with torque-limited reaction wheels, PID and LQR pointing, a safe mode with hysteresis, and Monte Carlo verification against written requirements.", "isPartOf": {"@id": "https://isseysiele.github.io/portfolio/#website"}, "inLanguage": "en-AU", "dateModified": "2026-10-06", "headline": "Spacecraft Attitude Control", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}, "image": "https://isseysiele.github.io/portfolio/assets/og/og-default.jpg"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://isseysiele.github.io/portfolio/"}, {"@type": "ListItem", "position": 2, "name": "Work", "item": "https://isseysiele.github.io/portfolio/portfolio.html"}, {"@type": "ListItem", "position": 3, "name": "Spacecraft attitude control", "item": "https://isseysiele.github.io/portfolio/project-spacecraft.html"}]}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header site-header--light">
+    <a class="brand" href="index.html" aria-label="Issey Siele, home">
+      <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+      <span>
+        <span class="brand__name">Issey Siele</span>
+        <span class="brand__sub">Mechanical Engineering Portfolio</span>
+      </span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-toggle__bars" aria-hidden="true"></span><span class="visually-hidden">Open menu</span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="portfolio.html" aria-current="true">Work</a><a href="experience.html">Experience</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="site-nav__cta" href="resume.html">Summary PDF</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="cs-hero blueprint" aria-labelledby="cs-title">
+      <div class="cs-hero__inner">
+        <div class="reveal">
+          <p class="eyebrow">Personal project &middot; Experimental</p>
+          <h1 id="cs-title">Spacecraft<em>attitude control</em></h1>
+          <p class="cs-hero__lede">A personal project: a MATLAB simulation of a small spacecraft that has to hold a pointing direction with reaction wheels that can only push so hard, and a safe mode that takes over when it starts to tumble. It runs in simulation only. None of it has been tested on hardware.</p>
+        </div>
+        <figure class="cs-hero__figure reveal">
+          <svg class="modes" viewBox="0 0 600 480" role="img" aria-labelledby="modes-title modes-desc">
+            <title id="modes-title">Safe-mode state machine</title>
+            <desc id="modes-desc">Three modes. Nominal goes to safe detumble when the rate passes 6 degrees per second or a fault lasts 0.5 seconds. Safe detumble goes to safe hold when the rate stays below 0.5 degrees per second for 2 seconds. Safe hold returns to nominal when the fault is clear, the rate is below 0.5 degrees per second, the attitude error is below 4 degrees and 8 seconds have passed in hold.</desc>
+            <defs><marker id="md-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="md-head" d="M0 0 10 5 0 10z"/></marker></defs>
+            <circle class="md-start" cx="124" cy="18" r="6"/>
+            <line class="md-edge" x1="124" y1="24" x2="124" y2="54" marker-end="url(#md-head)"/>
+            <rect class="md-box" x="24" y="56" width="200" height="84" rx="3"/>
+            <text class="md-name" x="124" y="93">NOMINAL</text>
+            <text class="md-sub" x="124" y="120">PID or LQR pointing</text>
+            <rect class="md-box md-box--safe" x="376" y="56" width="200" height="84" rx="3"/>
+            <text class="md-name" x="476" y="93">SAFE_DETUMBLE</text>
+            <text class="md-sub" x="476" y="120">rate damping</text>
+            <rect class="md-box md-box--safe" x="200" y="352" width="200" height="84" rx="3"/>
+            <text class="md-name" x="300" y="389">SAFE_HOLD</text>
+            <text class="md-sub" x="300" y="416">low-gain hold</text>
+            <line class="md-edge" x1="226" y1="98" x2="372" y2="98" marker-end="url(#md-head)"/>
+            <text class="md-cond" x="300" y="84">|&omega;| &gt; 6&deg;/s</text>
+            <text class="md-cond" x="300" y="122">or fault for 0.5 s</text>
+            <line class="md-edge" x1="456" y1="142" x2="374" y2="349" marker-end="url(#md-head)"/>
+            <text class="md-cond md-cond--start" x="436" y="238">|&omega;| &lt; 0.5&deg;/s</text>
+            <text class="md-cond md-cond--start" x="436" y="260">for 2 s</text>
+            <line class="md-edge" x1="226" y1="349" x2="144" y2="143" marker-end="url(#md-head)"/>
+            <text class="md-cond md-cond--end" x="156" y="214">fault clear</text>
+            <text class="md-cond md-cond--end" x="156" y="236">|&omega;| &lt; 0.5&deg;/s</text>
+            <text class="md-cond md-cond--end" x="156" y="258">error &lt; 4&deg;</text>
+            <text class="md-cond md-cond--end" x="156" y="280">8 s in hold</text>
+            <text class="md-note" x="300" y="470">In above 6&deg;/s, out below 0.5&deg;/s: the gap stops the mode flapping.</text>
+          </svg>
+          <figcaption class="figcap--light">Fig. 01 / Safe-mode logic, drawn from the mode specification</figcaption>
+        </figure>
+      </div>
+      <dl class="glance reveal">
+        <div><dt>Type</dt><dd>Personal project, experimental</dd></div>
+        <div><dt>Length</dt><dd>Six weeks, logged week by week</dd></div>
+        <div><dt>Tools</dt><dd>MATLAB, with a Python output checker and a C++ controller stub</dd></div>
+        <div><dt>Status</dt><dd>Simulation only, not flight or hardware tested</dd></div>
+      </dl>
+    </section>
+
+    <nav class="cs-nav" aria-label="Case study sections">
+      <ol>
+        <li><a href="#outcome">Outcome</a></li>
+        <li><a href="#model">Model</a></li>
+        <li><a href="#control">Control</a></li>
+        <li><a href="#safe-mode">Safe mode</a></li>
+        <li><a href="#verification">Verification</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="#log">Log</a></li>
+      </ol>
+    </nav>
+
+    <div class="frame">
+      <section class="cs-section" id="outcome" aria-labelledby="h-outcome">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-outcome">Outcome</h2></div>
+          <div>
+            <p class="lead reveal">I wrote the requirements first, then built the model, the controllers and the mode logic against them, and finished with a Monte Carlo harness that checks each requirement by ID.</p>
+            <ul class="outcomes" style="margin-top:1.6rem">
+              <li class="outcome reveal"><span class="outcome__value">100%</span><span class="outcome__label">Monte Carlo trials that reached the detumble threshold within 60 s. The requirement was 95%. Each trial randomises the attitude (up to 120&deg;), the rate (up to 8&deg;/s per axis) and the disturbance torque.</span></li>
+              <li class="outcome reveal"><span class="outcome__value">13.22&deg;/s</span><span class="outcome__label">Worst angular rate seen across the trials, against a 15&deg;/s safety limit.</span></li>
+              <li class="outcome reveal"><span class="outcome__value">&plusmn;0.003 N&middot;m</span><span class="outcome__label">Reaction-wheel torque limit per axis. Every controller output stayed inside it, checked separately from pointing accuracy.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="model" aria-labelledby="h-model">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-model">Model</h2></div>
+          <div class="prose reveal">
+            <p>The spacecraft is a rigid body with a constant, diagonal inertia of 0.035, 0.040 and 0.025 kg&middot;m&sup2; about its three axes. Attitude is a scalar-first quaternion, and the state also carries the body rates and the integral of the pointing error.</p>
+            <p>The rotational dynamics are the full nonlinear equations, J&middot;d&omega;/dt + &omega; &times; (J&middot;&omega;) = &tau;, integrated with fourth-order Runge-Kutta. The quaternion drifts off unit length over a long run, so it is renormalised after every step. The reaction wheels are modelled as a torque limit of &plusmn;0.003 N&middot;m on each axis, and every run carries a small constant disturbance torque, up to 2&times;10<sup>&minus;5</sup> N&middot;m per axis.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="control" aria-labelledby="h-control">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-control">Control</h2></div>
+          <div class="prose reveal">
+            <p>Three controllers share the loop. Detumbling is plain rate damping, &tau; = &minus;K<sub>d</sub>&middot;&omega;, because at that point the only job is to stop the spin. For pointing there are two options:</p>
+            <ul>
+              <li>A PID on the quaternion error. The error takes the short way round (its sign flips when the scalar part goes negative), and the integral only builds in nominal mode, so it cannot wind up while safe mode is in charge.</li>
+              <li>An LQR designed on the small-angle model, with Q = diag(2, 2, 2, 0.15, 0.15, 0.15) and R = 2000&middot;I. The gain is also stored in the parameter file, so the project runs without the Control System Toolbox.</li>
+            </ul>
+            <p>The LQR settles more cleanly near the target because it comes straight from the linear model. The PID is easier to reason about and tune. Early in a large manoeuvre neither gain matters much: the wheels saturate and the response is set by the torque limit.</p>
+            <p>Around the simulation I built an interactive MATLAB app. It sets the initial attitude and rates, the controller, safe mode on or off and a fault-injection window, then plays a 3D animation of the body frame and exports it as video, with the run saved as CSV. A short Python script checks the exported CSVs, and a C++ stub holds the controller in an embedded style.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="safe-mode" aria-labelledby="h-safe-mode">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-safe-mode">Safe mode</h2></div>
+          <div class="prose reveal">
+            <p>The mode logic turned out to matter as much as the gains. With a single threshold the mode flaps: the rate hovers near the line and control switches back and forth. So entering and leaving use different thresholds, and every exit needs its condition to hold for a set time.</p>
+            <div class="table-wrap"><table class="data-table"><caption>Mode transitions</caption>
+              <thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Condition</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Nominal</th><td>Safe detumble</td><td>Rate above 6&deg;/s, or a fault active for 0.5 s</td></tr>
+                <tr><th scope="row">Safe detumble</th><td>Safe hold</td><td>Rate below 0.5&deg;/s for 2 s</td></tr>
+                <tr><th scope="row">Safe hold</th><td>Nominal</td><td>Fault clear, rate below 0.5&deg;/s, attitude error below 4&deg;, and at least 8 s in hold</td></tr>
+              </tbody>
+            </table></div>
+            <p>Two shortcuts are forbidden on purpose. Detumble cannot jump straight back to nominal, and nominal cannot drop into hold without detumbling first. Nothing returns to nominal while a fault flag is set.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="verification" aria-labelledby="h-verification">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-verification">Verification</h2></div>
+          <div class="prose reveal">
+            <p>Each requirement has an ID, and each test names the requirement it checks. The Monte Carlo harness runs 60 trials with a fixed seed and writes every run to CSV, so the numbers regenerate exactly.</p>
+            <div class="table-wrap"><table class="data-table"><caption>Requirements and results</caption>
+              <thead><tr><th scope="col">ID</th><th scope="col">Requirement</th><th scope="col">Checked by</th><th scope="col">Result</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">REQ-F1</th><td>Rates below 0.5&deg;/s after safe-mode entry</td><td>Safe-mode upset scenario, Monte Carlo</td><td>Met</td></tr>
+                <tr><th scope="row">REQ-F2</th><td>Hold the target attitude within &plusmn;2&deg; in nominal mode</td><td>PID and LQR pointing from 25&deg;, &minus;15&deg;, 20&deg;</td><td>Both converge</td></tr>
+                <tr><th scope="row">REQ-S1</th><td>Rate never above 15&deg;/s in the verification cases</td><td>Maximum-rate check on every log</td><td>Worst Monte Carlo trial 13.22&deg;/s</td></tr>
+                <tr><th scope="row">REQ-S2</th><td>Commanded torque inside the actuator limit</td><td>Saturation check on every controller output</td><td>Held in every run</td></tr>
+                <tr><th scope="row">REQ-L1</th><td>Reach the detumble threshold within 60 s in at least 95% of trials</td><td>Monte Carlo pass rate</td><td>100%</td></tr>
+              </tbody>
+            </table></div>
+            <p>The worst cases combine a large attitude error with a spin on more than one axis. The wheels saturate early in those, so the actuator sets the response rather than the controller. That is why the torque limit is checked on its own instead of being inferred from good pointing at the end.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="limits" aria-labelledby="h-limits">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-limits">Limits</h2></div>
+          <div class="prose reveal">
+            <p>This is a first version with its assumptions written down, and they bound what the results mean.</p>
+            <ul>
+              <li>The controllers see the true simulated state. There is no sensor noise and no estimator; I kept both out of scope from the first week.</li>
+              <li>The wheels are a torque limit only, with no wheel speed, momentum build-up or friction.</li>
+              <li>The LQR is designed on a small-angle linearisation, so it is only valid near the target. The simulation itself stays nonlinear.</li>
+              <li>Disturbance torque is constant within each run.</li>
+              <li>The 3D spacecraft in the animation is a representative shape for watching the attitude, not a CAD model.</li>
+            </ul>
+            <p>Adding sensor noise and an estimator would let the controller work from what a spacecraft could actually measure.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="log" aria-labelledby="h-log">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-log">Log</h2></div>
+          <div class="prose reveal">
+            <p>I kept a weekly log of what I built, the problems I hit or saw coming, and what I decided.</p>
+            <div class="table-wrap"><table class="data-table"><caption>Weekly log</caption>
+              <thead><tr><th scope="col">Week</th><th scope="col">Built</th><th scope="col">Problem</th><th scope="col">Decision</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">1</th><td>Requirements and assumptions</td><td>Scope could grow into estimator design</td><td>Leave the estimator and noise model out of the first version</td></tr>
+                <tr><th scope="row">2</th><td>Quaternion rigid-body model</td><td>Quaternions drift numerically</td><td>Renormalise after every RK4 step</td></tr>
+                <tr><th scope="row">3</th><td>PID, LQR and detumble controllers</td><td>LQR design can need a toolbox</td><td>Store a fallback gain in the parameter file</td></tr>
+                <tr><th scope="row">4</th><td>Safe-mode state machine</td><td>Threshold-only logic flaps</td><td>Add hysteresis and minimum dwell times</td></tr>
+                <tr><th scope="row">5</th><td>Test matrix and Monte Carlo harness</td><td>Some cases saturate early</td><td>Treat saturation as expected and check the limit explicitly</td></tr>
+                <tr><th scope="row">6</th><td>Figures, tables and a report draft</td><td>The report could become too theoretical</td><td>Tie every result back to a requirement ID</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="cs-pager" aria-label="More case studies">
+      <a href="project-warman.html"><span>Previous case study</span><strong>&larr; Warman design and build</strong></a>
+      <a href="portfolio.html"><span>All work</span><strong>Case study index &rarr;</strong></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer blueprint">
+    <div class="site-footer__inner">
+      <div>
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+          <span>
+            <span class="brand__name">Issey Siele</span>
+            <span class="brand__sub">Mechanical Engineering Portfolio</span>
+          </span>
+        </a>
+        <p class="site-footer__tagline">Mechanical Engineering (Honours) and Computer Science at Griffith University. Kinematic analysis, CAD and field engineering, now on a construction site.</p>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Navigate</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html">Work</a></li>
+          <li><a href="experience.html">Experience</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Case studies</h2>
+        <ul>
+          <li><a href="project-rt300.html">RT300 upper-limb retrofit</a></li>
+          <li><a href="project-nosense.html">Penny press field engineering</a></li>
+          <li><a href="project-warman.html">Warman design and build</a></li>
+          <li><a href="project-spacecraft.html">Spacecraft attitude control</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Connect</h2>
+        <ul>
+          <li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;">&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;</a></li>
+          <li><a href="https://www.linkedin.com/in/isseysiele/" rel="noopener">LinkedIn</a></li>
+          <li><a href="assets/docs/Issey-Siele-Portfolio-Summary.pdf" download>Summary (PDF)</a></li>
+          <li><a href="assets/docs/issey-siele.vcf" download>Save contact (vCard)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Issey Siele</span>
+      <span>Updated <time datetime="2026-10-06">6 Oct 2026</time></span>
+      <span>Static HTML, CSS and JavaScript. No cookies, no trackers.</span>
+    </div>
+  </footer>
+</body>
+</html>
