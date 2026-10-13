@@ -7,7 +7,9 @@ Live: https://isseysiele.github.io/portfolio/
 ## Layout
 
 - `index.html`, `portfolio.html`, `experience.html`, `about.html`, `contact.html`: main pages
-- `project-rt300.html`, `project-nosense.html`, `project-warman.html`, `project-spacecraft.html`: case studies
+- `project-rt300.html`, `project-nosense.html`, `project-warman.html`, `project-spacecraft.html`, `project-gearbox.html`: case studies
+- `project-search.html`, `project-tariff.html`: coursework write-ups
+- `tool-mohr.html` and `tool-mohr.js`: the Mohr's circle calculator
 - `resume.html` + `resume.css`: two-page printable summary (A4)
 - `styles.css`: the Drafting Studio design system
 - `script.js`: navigation, reveal, videos, lightbox, chart tooltips

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maze Solver and Crossword Filler | Issey Siele</title>
+  <meta name="description" content="Coursework: two Python programs, a maze solver that compares iterative deepening, A* and IDA*, and a crossword filler built on node consistency, AC-3 and backtracking with ordering heuristics, with measured results.">
+  <meta name="author" content="Issey Siele">
+  <link rel="canonical" href="https://isseysiele.github.io/portfolio/project-search.html">
+  <meta name="theme-color" content="#1b222b">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Issey Siele">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Maze Solver and Crossword Filler | Issey Siele">
+  <meta property="og:description" content="Coursework: a maze solver comparing iterative deepening, A* and IDA*, and a crossword filler using AC-3 and backtracking, with measured results.">
+  <meta property="og:url" content="https://isseysiele.github.io/portfolio/project-search.html">
+  <meta property="og:image" content="https://isseysiele.github.io/portfolio/assets/og/og-default.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Issey Siele, mechanical engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" href="assets/fonts/didact-gothic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261007">
+  <style>
+    /* Sections with a wide results table: text blocks stay at reading width, the table uses the full column. */
+    .stack > * + * { margin-top: 1.1rem; }
+    .stack > .table-wrap, .stack > .table-wrap + * { margin-top: clamp(1.4rem, 3vw, 2rem); }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js?v=20261007"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Person", "@id": "https://isseysiele.github.io/portfolio/#person", "name": "Issey Siele", "url": "https://isseysiele.github.io/portfolio/", "image": "https://isseysiele.github.io/portfolio/assets/img/about-portrait.webp", "jobTitle": "Construction Cadet", "worksFor": {"@type": "Organization", "name": "Binah Construction"}, "affiliation": {"@type": "CollegeOrUniversity", "name": "Griffith University"}, "knowsAbout": ["Mechanical engineering", "Kinematic analysis", "SolidWorks", "Mechanism analysis", "Field service engineering", "Construction programming", "Python", "MATLAB", "Data science"], "knowsLanguage": ["en", "ti"], "address": {"@type": "PostalAddress", "addressLocality": "Brisbane", "addressRegion": "QLD", "addressCountry": "AU"}, "sameAs": ["https://www.linkedin.com/in/isseysiele/"]}, {"@type": "WebSite", "@id": "https://isseysiele.github.io/portfolio/#website", "url": "https://isseysiele.github.io/portfolio/", "name": "Issey Siele, Mechanical Engineering Portfolio", "inLanguage": "en-AU", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}}, {"@type": "Article", "@id": "https://isseysiele.github.io/portfolio/project-search.html#page", "url": "https://isseysiele.github.io/portfolio/project-search.html", "name": "Maze Solver and Crossword Filler | Issey Siele", "description": "Coursework: two Python programs, a maze solver that compares iterative deepening, A* and IDA*, and a crossword filler built on node consistency, AC-3 and backtracking with ordering heuristics, with measured results.", "isPartOf": {"@id": "https://isseysiele.github.io/portfolio/#website"}, "inLanguage": "en-AU", "datePublished": "2026-10-13", "dateModified": "2026-10-13", "headline": "Maze Solver and Crossword Filler", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}, "image": "https://isseysiele.github.io/portfolio/assets/og/og-default.jpg"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://isseysiele.github.io/portfolio/"}, {"@type": "ListItem", "position": 2, "name": "Work", "item": "https://isseysiele.github.io/portfolio/portfolio.html"}, {"@type": "ListItem", "position": 3, "name": "Maze solver and crossword filler", "item": "https://isseysiele.github.io/portfolio/project-search.html"}]}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header site-header--light">
+    <a class="brand" href="index.html" aria-label="Issey Siele, home">
+      <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+      <span>
+        <span class="brand__name">Issey Siele</span>
+        <span class="brand__sub">Mechanical Engineering Portfolio</span>
+      </span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-toggle__bars" aria-hidden="true"></span><span class="visually-hidden">Open menu</span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="portfolio.html" aria-current="true">Work</a><a href="experience.html">Experience</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="site-nav__cta" href="resume.html">Summary PDF</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="cs-hero blueprint" aria-labelledby="cs-title">
+      <div class="cs-hero__inner">
+        <div class="reveal">
+          <p class="eyebrow">Coursework &middot; Individual</p>
+          <h1 id="cs-title">Maze solver<em>and crossword filler</em></h1>
+          <p class="cs-hero__lede">Coursework from my Intelligent Systems course: two Python programs. A maze solver compares three search methods, and a crossword filler treats the puzzle as a constraint problem and compares two ways of ordering its search. I wrote both from the course brief, building on the course&rsquo;s tutorial and workshop material, and measured how each method behaves.</p>
+        </div>
+        <figure class="cs-hero__figure reveal">
+          <div class="sheet fig__frame"><button type="button" class="zoom" data-full="assets/img/search-maze-astar.webp" data-caption="Fig. 01 / A* on the large maze, 87 by 101 cells. Yellow: the path A* returned. Muted red: other cells it settled. Pale: cells it never settled. Dark grey: walls" aria-label="Enlarge: Picture of an 87 by 101 maze after an A* search. Dark grey walls form winding corridors. Most open cells are muted red, meaning A* settled them. A long yellow path winds from a bright red start cell at the bottom right to a green goal cell left of centre, and a block of pale cells at the top left was never settled."><img src="assets/img/search-maze-astar.webp" width="1600" height="1378" alt="Picture of an 87 by 101 maze after an A* search. Dark grey walls form winding corridors. Most open cells are muted red, meaning A* settled them. A long yellow path winds from a bright red start cell at the bottom right to a green goal cell left of centre, and a block of pale cells at the top left was never settled." fetchpriority="high" decoding="async"><span class="zoom__hint" aria-hidden="true">Enlarge</span></button></div>
+          <figcaption class="figcap--light">Fig. 01 / A* on the large maze. Yellow: the path it returned. Muted red: other cells it settled. Pale: cells it never settled. Dark grey: walls. Start is the bright red cell at the bottom right, goal the green cell on the left</figcaption>
+        </figure>
+      </div>
+      <dl class="glance reveal">
+        <div><dt>Type</dt><dd>Coursework, individual</dd></div>
+        <div><dt>Course</dt><dd>Intelligent Systems</dd></div>
+        <div><dt>Tools</dt><dd>Python, with Pillow for the images</dd></div>
+        <div><dt>Measured</dt><dd>One timed run per case, Python 3.11 on Windows 11</dd></div>
+      </dl>
+    </section>
+
+    <nav class="cs-nav" aria-label="Case study sections">
+      <ol>
+        <li><a href="#outcome">Outcome</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#maze">Maze solver</a></li>
+        <li><a href="#crossword">Crossword filler</a></li>
+        <li><a href="#limits">Limits</a></li>
+      </ol>
+    </nav>
+
+    <div class="frame">
+      <section class="cs-section" id="outcome" aria-labelledby="h-outcome">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-outcome">Outcome</h2></div>
+          <div>
+            <p class="lead reveal">Both programs solved every case that has a solution and reported no solution on the two that do not. The interesting part is how differently the methods got there.</p>
+            <ul class="outcomes" style="margin-top:1.6rem">
+              <li class="outcome reveal"><span class="outcome__value">14&nbsp;ms</span><span class="outcome__label">A* on the largest maze (4,299 free cells, a 1,206-move solution), settling 4,115 nodes. Iterative deepening took about 59 seconds and IDA* about 28. All three found the same path cost.</span></li>
+              <li class="outcome reveal"><span class="outcome__value">28 nodes</span><span class="outcome__label">All A* needed, in 0.19 ms, to report no solution on a maze with a walled-off goal. Iterative deepening and IDA* took about 9.9 and 8.9 seconds.</span></li>
+              <li class="outcome reveal"><span class="outcome__value">1,809 to 71</span><span class="outcome__label">Undone word choices in one crossword case once the ordering heuristics were on. The run was slower with them, though: 92.51 ms against 43.07 ms.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="background" aria-labelledby="h-background">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-background">Background</h2></div>
+          <div class="prose reveal">
+            <p>This was individual coursework, and I wrote both programs. They were written from the course brief and build on the course&rsquo;s tutorial and workshop material, which I drew on heavily. None of the algorithms, and none of the overall approach, is my own idea. They are standard methods, and my report cites Russell and Norvig&rsquo;s textbook for them.</p>
+            <p>The course also supplied starting code for each task. For the maze, that was a program that reads a maze file, finds the neighbours of a cell, prints the maze and draws the picture. I kept those parts, changed the node and frontier classes, and wrote the three searches and the command-line output. For the crossword, it was the grid and word-slot classes and a generator file with the drawing code and eight functions to complete. I wrote those eight, and added a switch that turns the ordering heuristics off and counters for recursive calls and undone choices, so the two modes could be compared.</p>
+            <p>The numbers on this page come from the result files my benchmark scripts printed, apart from the repeat run described under Limits. Each recorded case was run once, on one Windows 11 computer with Python 3.11. Node and undo counts are more repeatable than timings, so the big gaps in time are meaningful and gaps of a few hundredths of a millisecond are not.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="maze" aria-labelledby="h-maze">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-maze">Maze solver</h2></div>
+          <div class="stack">
+            <div class="prose reveal">
+              <p>The maze is a grid of free cells and walls. A state is the agent&rsquo;s row and column. It moves one cell up, down, left or right into a free cell, every move costs one, and the goal is the cell marked B, so the cheapest path is also the shortest. I wrote three searches for it:</p>
+              <ul>
+                <li><b>Iterative deepening search (IDS)</b> runs a depth-first search with a depth limit that starts at zero and rises by one each round. It skips any cell already on the current path, which stops loops without keeping a global explored set.</li>
+                <li><b>A*</b> always takes the frontier node with the lowest f, where f is the cost so far plus the Manhattan distance to the goal. It keeps the cheapest known cost to each cell and never processes a cell twice.</li>
+                <li><b>IDA*</b> is depth-first like IDS but cuts off on f instead of depth. Its first limit is the Manhattan distance from start to goal, and each new limit is the smallest f that went over the last one.</li>
+              </ul>
+              <p>Manhattan distance never overestimates, because walls can only make the real route longer and one step changes it by at most one. That makes it admissible and consistent, so the answers should be shortest paths, and all three methods returned the same path cost on every solvable maze. Figure 1 at the top of the page shows the A* run on the largest maze.</p>
+            </div>
+            <div class="table-wrap reveal"><table class="data-table"><caption>Maze results, one run each</caption>
+              <thead><tr><th scope="col">Grid (rows &times; columns)</th><th scope="col">Free cells</th><th scope="col">Moves</th><th scope="col">IDS nodes</th><th scope="col">IDS ms</th><th scope="col">A* nodes</th><th scope="col">A* ms</th><th scope="col">IDA* nodes</th><th scope="col">IDA* ms</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">6 &times; 7</th><td>11</td><td>10</td><td>66</td><td>0.18</td><td>11</td><td>0.04</td><td>11</td><td>0.04</td></tr>
+                <tr><th scope="row">6 &times; 7</th><td>18</td><td>4</td><td>18</td><td>0.07</td><td>5</td><td>0.02</td><td>5</td><td>0.06</td></tr>
+                <tr><th scope="row">16 &times; 29</th><td>205</td><td>30</td><td>910</td><td>2.33</td><td>59</td><td>0.18</td><td>178</td><td>0.64</td></tr>
+                <tr><th scope="row">6 &times; 10, goal walled off</th><td>29</td><td>no solution</td><td>3,070,712</td><td>9,941.66</td><td>28</td><td>0.19</td><td>2,119,306</td><td>8,900.59</td></tr>
+                <tr class="is-key"><th scope="row">87 &times; 101</th><td>4,299</td><td>1,206</td><td>2,213,919</td><td>58,950.19</td><td>4,115</td><td>14.25</td><td>994,077</td><td>27,760.65</td></tr>
+              </tbody>
+            </table></div>
+            <div class="prose reveal">
+              <p>IDS and IDA* node counts are totals across all their rounds. The three methods also count slightly differently: IDS counts nodes processed at each depth limit, IDA* counts nodes accepted under the current limit, and A* counts nodes it settled. The broad differences are more reliable than small ones.</p>
+              <p>A* was the fastest method on every maze, tying with IDA* at 0.04 ms on the smallest. On the largest it settled 4,115 nodes in 14.25 ms, where IDA* took 994,077 nodes and about 28 seconds, and IDS took 2,213,919 nodes and about 59 seconds. The iterative methods repeat earlier work each time their limit rises, where A* remembers the cheapest way to each cell. The cost is memory: A* has to hold its frontier and cost table, while the other two follow a single path at a time.</p>
+              <p>The maze with a walled-off goal shows the widest gap. A* ran out of reachable cells after 28 nodes and reported no solution in 0.19 ms. IDS and IDA* had to try the alternative simple paths before they could be sure, which took 3,070,712 and 2,119,306 nodes and about 9.9 and 8.9 seconds, on a maze with only 29 free cells.</p>
+              <p>Manhattan distance gave only weak guidance on the largest maze. A* still settled 4,115 of its 4,299 free cells (the pale cells in Figure 1 are the 184 it never settled), because the corridors often lead away from the goal before they lead back. It still avoided the repeated work that dominated the other two.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="crossword" aria-labelledby="h-crossword">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-crossword">Crossword filler</h2></div>
+          <div class="stack">
+            <div class="prose reveal">
+              <p>A crossword is a constraint satisfaction problem. Each run of two or more writable cells, across or down, is a variable, and its value is a word. Every variable starts with the whole word list as its domain. Three rules apply: a word has to fit its slot exactly, no word can be used twice, and where two slots cross the letters must match. These are the steps I wrote:</p>
+              <ul>
+                <li><b>Node consistency</b> removes every word whose length does not fit its slot.</li>
+                <li><b>AC-3</b> removes words that have no matching letter in a crossing slot, and puts the neighbours of a changed slot back in the queue. If a slot ends up with no words, the puzzle has no solution.</li>
+                <li><b>Backtracking search</b> places one word at a time, checks the partial grid, and undoes the choice if it fails.</li>
+                <li><b>Ordering heuristics</b> decide what to try first. Minimum remaining values picks the slot with the fewest words left, and the degree heuristic breaks ties by picking the slot that crosses the most unfilled slots. Least constraining value then tries first the word that rules out the fewest words in the crossing slots.</li>
+              </ul>
+              <p>To measure the heuristics I ran every case twice. In the naive mode the slots were taken in a fixed order and the words alphabetically. In the other mode all three heuristics were on. Both modes used node consistency and the first AC-3 pass, so the comparison isolates the ordering. I counted undo events, which are word choices that were tried and then removed, and recursive calls.</p>
+              <p>The cases use the three grid layouts and three word lists supplied with the task. Grid A has 4 word slots, grids B and C have 6, and the lists hold 10, 51 and 3,000 words. One case, grid B with the 10-word list, has no solution.</p>
+            </div>
+            <div class="table-wrap reveal"><table class="data-table"><caption>Crossword results, one run each</caption>
+              <thead><tr><th scope="col">Case</th><th scope="col">Domain entries at start</th><th scope="col">After node consistency</th><th scope="col">After AC-3</th><th scope="col">Naive ms</th><th scope="col">Naive undos</th><th scope="col">Heuristics ms</th><th scope="col">Heuristics undos</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Grid A, 51 words</th><td>204</td><td>27</td><td>8</td><td>0.21</td><td>0</td><td>0.26</td><td>0</td></tr>
+                <tr><th scope="row">Grid A, 3,000 words</th><td>12,000</td><td>1,661</td><td>1,636</td><td>20.52</td><td>405</td><td>85.62</td><td>96</td></tr>
+                <tr><th scope="row">Grid B, 51 words</th><td>306</td><td>39</td><td>8</td><td>0.35</td><td>0</td><td>0.44</td><td>0</td></tr>
+                <tr class="is-key"><th scope="row">Grid B, 3,000 words</th><td>18,000</td><td>2,386</td><td>1,884</td><td>43.07</td><td>1,809</td><td>92.51</td><td>71</td></tr>
+                <tr><th scope="row">Grid C, 3,000 words</th><td>18,000</td><td>2,654</td><td>2,459</td><td>51.19</td><td>3,297</td><td>156.51</td><td>568</td></tr>
+                <tr><th scope="row">Grid B, 10 words, no solution</th><td>60</td><td>6</td><td>3</td><td>0.07</td><td>0</td><td>0.09</td><td>0</td></tr>
+              </tbody>
+            </table></div>
+            <div class="prose reveal">
+              <p>Domain entries are the candidate words added up over all slots. Undos are word choices removed after they failed. Recursive calls are left out of the table: they fell from 46 to 7 on grid B with the 3,000-word list and from 13 to 7 on grid C, and stayed the same in the other cases.</p>
+              <p>Filtering did the first round of work. For grid B with the 3,000-word list, node consistency cut the 18,000 starting entries to 2,386 and AC-3 cut them to 1,884. With the 10 and 51 word lists, filtering left so few words that neither mode had to undo a single choice.</p>
+              <p>The ordering heuristics cut failed search in the larger cases. On grid B with the 3,000-word list, undo events fell from 1,809 to 71 and recursive calls from 46 to 7. On grid C they fell from 3,297 to 568, and on grid A with the same list from 405 to 96.</p>
+              <p>They were also slower, in every recorded run. Least constraining value compares each candidate word against many words in the crossing slots, so choosing a better order has a cost of its own. On grid C the heuristics took 156.51 ms against 51.19 ms for the naive order, even though far fewer choices were undone. On the tiny cases the gaps are hundredths of a millisecond, which I would not read anything into, but the larger gaps are real. Fewer wrong choices did not mean less time on inputs this small.</p>
+              <p>My report still recommended keeping the heuristics, because they give a more reliable search order as puzzles get harder. These tests show fewer undone choices but not a faster run. I only tried the puzzles supplied with the task, so I have not tested the harder puzzles that recommendation looks ahead to.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="limits" aria-labelledby="h-limits">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-limits">Limits</h2></div>
+          <div class="prose reveal">
+            <p>These are small experiments, and they have limits worth writing down.</p>
+            <ul>
+              <li>Each recorded case was run once, so timings are a guide only. Node and undo counts are more repeatable. A second run of the maze benchmark, made while this page was being prepared, gave identical node counts but timings roughly three times longer (A* took 41.88 ms on the largest maze, IDS about 203 seconds and IDA* about 88). The order of the methods on the larger mazes did not change, but on the two smallest mazes IDA* came out 0.01 ms ahead of A*, so I read nothing into those gaps.</li>
+              <li>There are five mazes and six crossword cases. They cover a range of sizes and one unsolvable case for each program, but not many puzzles.</li>
+              <li>A* chooses its next node by scanning the whole frontier list for the lowest f. That slows down on a large frontier, and a heap would be faster on bigger mazes.</li>
+              <li>The explored cells in Figure 1 are the whole A* search. The program&rsquo;s pictures for IDS and IDA* keep only the last round, so their coloured area understates the work those two did.</li>
+              <li>Two next steps I have not built: cutting down least constraining value&rsquo;s repeated scans of the word lists, and running arc consistency again after each word is placed, so that minimum remaining values works from up-to-date domain sizes and finds dead ends earlier.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="cs-pager" aria-label="More work">
+      <a href="project-spacecraft.html"><span>Another project</span><strong>&larr; Spacecraft attitude control</strong></a>
+      <a href="portfolio.html#coursework"><span>All work</span><strong>Coursework list &rarr;</strong></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer blueprint">
+    <div class="site-footer__inner">
+      <div>
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+          <span>
+            <span class="brand__name">Issey Siele</span>
+            <span class="brand__sub">Mechanical Engineering Portfolio</span>
+          </span>
+        </a>
+        <p class="site-footer__tagline">Mechanical Engineering (Honours) and Computer Science at Griffith University. Kinematic analysis, CAD and field engineering, now on a construction site.</p>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Navigate</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html">Work</a></li>
+          <li><a href="experience.html">Experience</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Case studies</h2>
+        <ul>
+          <li><a href="project-rt300.html">RT300 upper-limb retrofit</a></li>
+          <li><a href="project-nosense.html">Penny press field engineering</a></li>
+          <li><a href="project-warman.html">Warman design and build</a></li>
+          <li><a href="project-spacecraft.html">Spacecraft attitude control</a></li>
+          <li><a href="project-gearbox.html">Spur gear reducer for a tube saw</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Connect</h2>
+        <ul>
+          <li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;">&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;</a></li>
+          <li><a href="https://www.linkedin.com/in/isseysiele/" rel="noopener">LinkedIn</a></li>
+          <li><a href="assets/docs/Issey-Siele-Portfolio-Summary.pdf" download>Summary (PDF)</a></li>
+          <li><a href="assets/docs/issey-siele.vcf" download>Save contact (vCard)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Issey Siele</span>
+      <span>Updated <time datetime="2026-10-13">13 Oct 2026</time></span>
+      <span>Static HTML, CSS and JavaScript. No cookies, no trackers.</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mohr&rsquo;s Circle Calculator | Issey Siele</title>
+  <meta name="description" content="A small plane-stress Mohr's circle calculator in plain JavaScript: enter the normal and shear stresses and get the centre, radius, principal stresses, maximum in-plane shear and principal angle, with the circle drawn.">
+  <meta name="author" content="Issey Siele">
+  <link rel="canonical" href="https://isseysiele.github.io/portfolio/tool-mohr.html">
+  <meta name="theme-color" content="#1b222b">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Issey Siele">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Mohr's Circle Calculator | Issey Siele">
+  <meta property="og:description" content="A small plane-stress Mohr's circle calculator in plain JavaScript, with the circle drawn as inline SVG.">
+  <meta property="og:url" content="https://isseysiele.github.io/portfolio/tool-mohr.html">
+  <meta property="og:image" content="https://isseysiele.github.io/portfolio/assets/og/og-default.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Issey Siele, mechanical engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" href="assets/fonts/didact-gothic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261007">
+  <style>
+    /* Calculator layout and drawing styles. Colours come from the site's custom properties in styles.css. */
+    .cs-hero__inner { grid-template-columns: minmax(0, 1fr); }
+    .cs-hero__lede { max-width: 46rem; }
+    .mohr-h { margin: 0 0 clamp(1.2rem, 3vw, 1.8rem); font-size: clamp(1.45rem, 2.4vw, 1.9rem); text-transform: uppercase; line-height: 1.1; }
+    .mohr { display: grid; grid-template-columns: minmax(0, 21rem) minmax(0, 1fr); grid-template-areas: "form figure" "results figure"; gap: clamp(1.2rem, 3vw, 2rem); align-items: start; }
+    .mohr__form { grid-area: form; }
+    .mohr__results { grid-area: results; }
+    .mohr__figure { grid-area: figure; margin: 0; min-width: 0; }
+    html:not(.js) .mohr__form, html:not(.js) .mohr__figure { display: none; }
+    html:not(.js) .mohr { grid-template-columns: minmax(0, 1fr); grid-template-areas: "results"; }
+    .mohr__fields { border: 0; margin: 0; padding: 0; min-width: 0; }
+    .mohr__fields legend { padding: 0; margin-bottom: 0.2rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .mohr__field { display: grid; gap: 0.3rem; margin-top: 0.9rem; }
+    .mohr__field label { font-size: 0.95rem; color: var(--ink); }
+    .mohr__field input { width: 100%; font: inherit; font-family: var(--mono); font-size: 1rem; color: var(--ink); background: var(--card); border: 1px solid var(--ink); border-radius: var(--radius); padding: 0.55rem 0.7rem; }
+    .mohr__field input:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+    .mohr__field input[aria-invalid="true"] { border-color: var(--copper-deep); background: var(--copper-wash); }
+    .mohr__hint { margin: 1rem 0 1.1rem; font-size: 0.88rem; line-height: 1.5; }
+    .mohr__results dd { font-size: 0.92rem; }
+    .mohr__status { margin: 0.9rem 0 0; padding-top: 0.8rem; border-top: 1px solid var(--line); font-size: 0.9rem; line-height: 1.5; }
+    .mohr__svg { min-width: 0; }
+    .mohr__svg svg { width: 100%; height: auto; }
+    .mohr .legend { margin-top: 1rem; }
+    .mohr__a { background: var(--copper-deep); }
+    .mohr__b { width: 9px; height: 9px; border-radius: 0; background: var(--ink); }
+    .mohr .key--tick { background: var(--copper-deep); }
+    .mc-frame { fill: none; stroke: var(--line); }
+    .mc-grid { stroke: var(--chart-grid); stroke-width: 1; }
+    .mc-axis { stroke: var(--ink); stroke-width: 1.2; }
+    .mc-circle { fill: var(--copper-wash); stroke: var(--chart-accent); stroke-width: 2; }
+    .mc-diam { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 5 4; }
+    .mc-a { fill: var(--copper-deep); }
+    .mc-b { fill: var(--ink); }
+    .mc-c { fill: var(--ink); }
+    .mc-prin { stroke: var(--copper-deep); stroke-width: 2.5; }
+    .mc-tick { font: 11px var(--mono); fill: var(--muted); }
+    .mc-axis-title { font: 12px var(--mono); fill: var(--muted); }
+    .mc-lab { font: 600 14px var(--body); fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
+    .mc-sub { font-size: 10px; }
+    .fit-table th, .fit-table td { white-space: normal; padding: 0.55rem 0.7rem; }
+    .fit-table td { text-align: left; }
+    .prose code { font-family: var(--mono); font-size: 0.88em; color: var(--ink); }
+    @media (max-width: 860px) {
+      .mohr { grid-template-columns: minmax(0, 1fr); grid-template-areas: "form" "figure" "results"; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js?v=20261007"></script>
+  <script defer src="tool-mohr.js?v=20261013"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Person", "@id": "https://isseysiele.github.io/portfolio/#person", "name": "Issey Siele", "url": "https://isseysiele.github.io/portfolio/", "image": "https://isseysiele.github.io/portfolio/assets/img/about-portrait.webp", "jobTitle": "Construction Cadet", "worksFor": {"@type": "Organization", "name": "Binah Construction"}, "affiliation": {"@type": "CollegeOrUniversity", "name": "Griffith University"}, "knowsAbout": ["Mechanical engineering", "Kinematic analysis", "SolidWorks", "Mechanism analysis", "Field service engineering", "Construction programming", "Python", "MATLAB", "Data science"], "knowsLanguage": ["en", "ti"], "address": {"@type": "PostalAddress", "addressLocality": "Brisbane", "addressRegion": "QLD", "addressCountry": "AU"}, "sameAs": ["https://www.linkedin.com/in/isseysiele/"]}, {"@type": "WebSite", "@id": "https://isseysiele.github.io/portfolio/#website", "url": "https://isseysiele.github.io/portfolio/", "name": "Issey Siele, Mechanical Engineering Portfolio", "inLanguage": "en-AU", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}}, {"@type": "Article", "@id": "https://isseysiele.github.io/portfolio/tool-mohr.html#page", "url": "https://isseysiele.github.io/portfolio/tool-mohr.html", "name": "Mohr's Circle Calculator | Issey Siele", "description": "A small plane-stress Mohr's circle calculator in plain JavaScript: enter the normal and shear stresses and get the centre, radius, principal stresses, maximum in-plane shear and principal angle, with the circle drawn.", "isPartOf": {"@id": "https://isseysiele.github.io/portfolio/#website"}, "inLanguage": "en-AU", "datePublished": "2026-10-13", "dateModified": "2026-10-13", "headline": "Mohr's Circle Calculator", "author": {"@id": "https://isseysiele.github.io/portfolio/#person"}, "image": "https://isseysiele.github.io/portfolio/assets/og/og-default.jpg"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://isseysiele.github.io/portfolio/"}, {"@type": "ListItem", "position": 2, "name": "Work", "item": "https://isseysiele.github.io/portfolio/portfolio.html"}, {"@type": "ListItem", "position": 3, "name": "Mohr's circle calculator", "item": "https://isseysiele.github.io/portfolio/tool-mohr.html"}]}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header site-header--light">
+    <a class="brand" href="index.html" aria-label="Issey Siele, home">
+      <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+      <span>
+        <span class="brand__name">Issey Siele</span>
+        <span class="brand__sub">Mechanical Engineering Portfolio</span>
+      </span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-toggle__bars" aria-hidden="true"></span><span class="visually-hidden">Open menu</span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="portfolio.html" aria-current="true">Work</a><a href="experience.html">Experience</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="site-nav__cta" href="resume.html">Summary PDF</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="cs-hero blueprint" aria-labelledby="cs-title">
+      <div class="cs-hero__inner">
+        <div class="reveal">
+          <p class="eyebrow">Tool &middot; Plane stress only</p>
+          <h1 id="cs-title">Mohr&rsquo;s circle<em>calculator</em></h1>
+          <p class="cs-hero__lede">A small tool I wrote while studying mechanics of materials. Enter a plane-stress state and it gives the centre and radius of the circle, the two principal stresses, the maximum in-plane shear and the principal angle, and draws the circle with the two state points. It covers plane stress only.</p>
+        </div>
+      </div>
+      <dl class="glance reveal">
+        <div><dt>Type</dt><dd>Small study tool, plane stress only</dd></div>
+        <div><dt>Inputs</dt><dd>&sigma;<sub>x</sub>, &sigma;<sub>y</sub> and &tau;<sub>xy</sub>, in MPa</dd></div>
+        <div><dt>Built with</dt><dd>Plain JavaScript and inline SVG, no libraries</dd></div>
+        <div><dt>Checked</dt><dd>Against hand calculations, see Checks below</dd></div>
+      </dl>
+    </section>
+
+    <nav class="cs-nav" aria-label="Page sections">
+      <ol>
+        <li><a href="#calculator">Calculator</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#checks">Checks</a></li>
+        <li><a href="#limits">Limits</a></li>
+      </ol>
+    </nav>
+
+    <div class="frame">
+      <section class="cs-section" id="calculator" aria-labelledby="h-calc">
+        <h2 class="mohr-h" id="h-calc">Calculator</h2>
+        <noscript><p>The calculator needs JavaScript. The results below are for the starting values of 80, &minus;40 and 30 MPa, and the method and two worked checks follow.</p></noscript>
+        <div class="mohr">
+          <form class="panel mohr__form" id="mohr-form" autocomplete="off" novalidate>
+            <fieldset class="mohr__fields">
+              <legend>Stress state, in MPa</legend>
+              <div class="mohr__field">
+                <label for="in-sx">Normal stress &sigma;<sub>x</sub></label>
+                <input id="in-sx" name="sx" type="number" step="any" inputmode="decimal" value="80" aria-invalid="false" aria-describedby="mohr-hint">
+              </div>
+              <div class="mohr__field">
+                <label for="in-sy">Normal stress &sigma;<sub>y</sub></label>
+                <input id="in-sy" name="sy" type="number" step="any" inputmode="decimal" value="-40" aria-invalid="false" aria-describedby="mohr-hint">
+              </div>
+              <div class="mohr__field">
+                <label for="in-txy">Shear stress &tau;<sub>xy</sub></label>
+                <input id="in-txy" name="txy" type="number" step="any" inputmode="decimal" value="30" aria-invalid="false" aria-describedby="mohr-hint">
+              </div>
+            </fieldset>
+            <p class="mohr__hint" id="mohr-hint">Tension is positive. &tau;<sub>xy</sub> is positive when it acts in the +y direction on the face whose outward normal is +x. The results update as you type.</p>
+            <button class="button button--small button--ink" type="reset">Reset to starting values</button>
+          </form>
+
+          <figure class="chart mohr__figure reveal">
+            <div class="chart__head">
+              <div>
+                <h3 class="chart__title">Mohr&rsquo;s circle for these stresses</h3>
+                <p class="chart__sub">Positive &tau; is drawn upwards, and both axes use the same scale.</p>
+              </div>
+            </div>
+            <div class="mohr__svg">
+              <svg id="mohr-svg" role="img" aria-labelledby="mohr-title mohr-desc" viewBox="0 0 520 400" preserveAspectRatio="xMidYMid meet">
+                <title id="mohr-title">Mohr&rsquo;s circle for the current inputs</title>
+                <desc id="mohr-desc">Circle centred at 20.00 MPa with radius 67.08 MPa. Point A at 80.00, 30.00 and point B at &minus;40.00, &minus;30.00 lie at opposite ends of a diameter. The circle crosses the sigma axis at the principal stresses 87.08 and &minus;47.08 MPa.</desc>
+                <g id="mohr-plot"></g>
+              </svg>
+            </div>
+            <ul class="legend">
+              <li><span class="key key--dot mohr__a"></span>A: (&sigma;<sub>x</sub>, &tau;<sub>xy</sub>)</li>
+              <li><span class="key mohr__b"></span>B: (&sigma;<sub>y</sub>, &minus;&tau;<sub>xy</sub>)</li>
+              <li><span class="key key--tick"></span>Principal stresses, on the &sigma; axis</li>
+              <li><span class="key key--dash"></span>Diameter AB, through the centre C</li>
+            </ul>
+          </figure>
+
+          <div class="readout mohr__results">
+            <h3 class="readout__name">Results</h3>
+            <p class="readout__change">All stresses in MPa, angle in degrees.</p>
+            <dl>
+              <div><dt>Centre, C</dt><dd id="out-c">20.00 MPa</dd></div>
+              <div><dt>Radius, R</dt><dd id="out-r">67.08 MPa</dd></div>
+              <div><dt>Principal stress &sigma;<sub>1</sub> (C + R)</dt><dd id="out-s1">87.08 MPa</dd></div>
+              <div><dt>Principal stress &sigma;<sub>2</sub> (C &minus; R)</dt><dd id="out-s2">&minus;47.08 MPa</dd></div>
+              <div><dt>Maximum in-plane shear, &tau;<sub>max</sub> (= R)</dt><dd id="out-tau">67.08 MPa</dd></div>
+              <div><dt>Principal angle, &theta;<sub>p</sub></dt><dd id="out-angle">13.28&deg;</dd></div>
+              <div><dt>Point A (&sigma;<sub>x</sub>, &tau;<sub>xy</sub>)</dt><dd id="out-a">(80.00, 30.00)</dd></div>
+              <div><dt>Point B (&sigma;<sub>y</sub>, &minus;&tau;<sub>xy</sub>)</dt><dd id="out-b">(&minus;40.00, &minus;30.00)</dd></div>
+            </dl>
+            <p class="mohr__status" id="mohr-status" role="status" aria-live="polite">Centre 20.00 MPa. Radius 67.08 MPa. Principal stresses 87.08 and &minus;47.08 MPa. Maximum in-plane shear 67.08 MPa. Principal angle 13.28 degrees, counterclockwise from the x axis to the plane of the first principal stress.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="method" aria-labelledby="h-method">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-method">Method</h2></div>
+          <div class="prose reveal">
+            <p>The circle follows from the stress state in the usual way.</p>
+            <ul>
+              <li><b>Centre:</b> C = (&sigma;<sub>x</sub> + &sigma;<sub>y</sub>) / 2.</li>
+              <li><b>Radius:</b> R = &radic;(((&sigma;<sub>x</sub> &minus; &sigma;<sub>y</sub>) / 2)&sup2; + &tau;<sub>xy</sub>&sup2;).</li>
+              <li><b>Principal stresses:</b> &sigma;<sub>1</sub> = C + R and &sigma;<sub>2</sub> = C &minus; R, where the circle crosses the &sigma; axis.</li>
+              <li><b>Maximum in-plane shear:</b> &tau;<sub>max</sub> = R, at the top and bottom of the circle.</li>
+              <li><b>Principal angle:</b> tan 2&theta;<sub>p</sub> = 2&tau;<sub>xy</sub> / (&sigma;<sub>x</sub> &minus; &sigma;<sub>y</sub>). The angle &theta;<sub>p</sub> runs counterclockwise from the x axis to the plane that carries &sigma;<sub>1</sub>, and the plane that carries &sigma;<sub>2</sub> is 90&deg; further round. On the circle it is half the angle from point A round to the &sigma;<sub>1</sub> intercept, measured clockwise.</li>
+            </ul>
+            <p>Point A is (&sigma;<sub>x</sub>, &tau;<sub>xy</sub>) and point B is (&sigma;<sub>y</sub>, &minus;&tau;<sub>xy</sub>), with &tau; drawn upwards. They sit at opposite ends of a diameter through C. If the circle shrinks to a point, because &sigma;<sub>x</sub> = &sigma;<sub>y</sub> and &tau;<sub>xy</sub> = 0, every direction is principal and the page reports no angle.</p>
+            <p>I first wrote this as a small React page for my own study. This version is plain JavaScript, with no libraries and no network requests, so it runs on this static site. It also reports the principal angle, draws the &tau; axis at &sigma; = 0, and uses one scale on both axes so the circle is round and the state points sit on it.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="checks" aria-labelledby="h-checks">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-checks">Checks</h2></div>
+          <div class="stack">
+            <div class="prose reveal">
+              <p>I worked two cases by hand and compared them with the calculator. The first is the starting case. The second has a negative shear and &sigma;<sub>x</sub> smaller than &sigma;<sub>y</sub>, so the principal angle falls in a different quadrant. The calculator gives the same values to two decimal places.</p>
+            </div>
+            <div class="table-wrap reveal"><table class="data-table fit-table"><caption>Hand calculations, in MPa and degrees</caption>
+              <thead><tr><th scope="col">Quantity</th><th scope="col">Case 1</th><th scope="col">Case 2</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">&sigma;<sub>x</sub>, &sigma;<sub>y</sub>, &tau;<sub>xy</sub></th><td>80, &minus;40, 30</td><td>&minus;50, 30, &minus;20</td></tr>
+                <tr><th scope="row">Centre</th><td>(80 &minus; 40) / 2 = 20</td><td>(&minus;50 + 30) / 2 = &minus;10</td></tr>
+                <tr><th scope="row">Radius</th><td>&radic;(60&sup2; + 30&sup2;) = &radic;4500 = 67.08</td><td>&radic;(40&sup2; + 20&sup2;) = &radic;2000 = 44.72</td></tr>
+                <tr><th scope="row">&sigma;<sub>1</sub></th><td>20 + 67.08 = 87.08</td><td>&minus;10 + 44.72 = 34.72</td></tr>
+                <tr><th scope="row">&sigma;<sub>2</sub></th><td>20 &minus; 67.08 = &minus;47.08</td><td>&minus;10 &minus; 44.72 = &minus;54.72</td></tr>
+                <tr><th scope="row">&tau;<sub>max</sub></th><td>67.08</td><td>44.72</td></tr>
+                <tr><th scope="row">&theta;<sub>p</sub></th><td>&frac12; atan(60 / 120) = 13.28&deg;</td><td>&frac12; atan2(&minus;40, &minus;80) = &minus;76.72&deg;</td></tr>
+              </tbody>
+            </table></div>
+            <div class="prose reveal">
+              <p>As a further check, &sigma;<sub>1</sub> + &sigma;<sub>2</sub> equals &sigma;<sub>x</sub> + &sigma;<sub>y</sub> and &sigma;<sub>1</sub>&sigma;<sub>2</sub> equals &sigma;<sub>x</sub>&sigma;<sub>y</sub> &minus; &tau;<sub>xy</sub>&sup2; in both cases. In case 1 the sum is 40 and the product is &minus;4100.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="limits" aria-labelledby="h-limits">
+        <div class="cs-grid">
+          <div class="cs-grid__label"><h2 id="h-limits">Limits</h2></div>
+          <div class="prose reveal">
+            <ul>
+              <li>Plane stress only. The normal stress in the z direction and the shears out of the plane are taken as zero. There is no three-dimensional state and no yield criterion.</li>
+              <li>The maximum shear shown is the in-plane value, the radius. When &sigma;<sub>1</sub> and &sigma;<sub>2</sub> have the same sign, the largest shear in any direction is bigger, because the third principal stress is zero. This tool does not report that.</li>
+              <li>It does not convert units. The labels say MPa, and any one consistent unit gives consistent results.</li>
+              <li>It is a study aid. I checked it against hand calculations, not against other software or a design code.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="cs-pager" aria-label="More work">
+      <a href="project-spacecraft.html"><span>Another project</span><strong>&larr; Spacecraft attitude control</strong></a>
+      <a href="portfolio.html#coursework"><span>All work</span><strong>Coursework list &rarr;</strong></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer blueprint">
+    <div class="site-footer__inner">
+      <div>
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="7" cy="21" r="2.6" stroke-width="2"/><circle cx="21" cy="7" r="2.6" stroke-width="2"/><line x1="9.3" y1="18.8" x2="18.7" y2="9.2" stroke-width="2"/></svg>
+          <span>
+            <span class="brand__name">Issey Siele</span>
+            <span class="brand__sub">Mechanical Engineering Portfolio</span>
+          </span>
+        </a>
+        <p class="site-footer__tagline">Mechanical Engineering (Honours) and Computer Science at Griffith University. Kinematic analysis, CAD and field engineering, now on a construction site.</p>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Navigate</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html">Work</a></li>
+          <li><a href="experience.html">Experience</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Case studies</h2>
+        <ul>
+          <li><a href="project-rt300.html">RT300 upper-limb retrofit</a></li>
+          <li><a href="project-nosense.html">Penny press field engineering</a></li>
+          <li><a href="project-warman.html">Warman design and build</a></li>
+          <li><a href="project-spacecraft.html">Spacecraft attitude control</a></li>
+          <li><a href="project-gearbox.html">Spur gear reducer for a tube saw</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Connect</h2>
+        <ul>
+          <li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;">&#105;&#115;&#115;&#101;&#121;&#46;&#115;&#105;&#101;&#108;&#101;&#64;&#103;&#114;&#105;&#102;&#102;&#105;&#116;&#104;&#117;&#110;&#105;&#46;&#101;&#100;&#117;&#46;&#97;&#117;</a></li>
+          <li><a href="https://www.linkedin.com/in/isseysiele/" rel="noopener">LinkedIn</a></li>
+          <li><a href="assets/docs/Issey-Siele-Portfolio-Summary.pdf" download>Summary (PDF)</a></li>
+          <li><a href="assets/docs/issey-siele.vcf" download>Save contact (vCard)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Issey Siele</span>
+      <span>Updated <time datetime="2026-10-13">13 Oct 2026</time></span>
+      <span>Static HTML, CSS and JavaScript. No cookies, no trackers.</span>
+    </div>
+  </footer>
+</body>
+</html>
